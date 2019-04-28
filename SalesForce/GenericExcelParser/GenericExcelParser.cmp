@@ -1,0 +1,61 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome"
+    access="global">
+    <aura:attribute type="String" name="ObjectName" default="" />
+    <aura:attribute type="Object[]" name="fileObject" default="[]" />
+    <aura:attribute type="String[]" name="propertyNameList" default="[]" />
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="data" type="Object" />
+    <aura:attribute name="dataTableReady" type="Boolean" default="false" />
+    <aura:attribute name="columnInformation" type="Object[]" default="[]" />
+    <aura:attribute name="options" type="Object[]"
+        default="[{'label':'Date','value':'Date'},{'label':'Currency','value':'Currency'}]" />
+    <aura:attribute name="canUploadFile" type="Boolean" default="false" />
+    <ltng:require scripts="{!join(',',$Resource.JZIP,$Resource.XLSX)}" afterScriptsLoaded="{!c.scriptsLoaded}" />
+
+
+
+    <lightning:card>
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem size="12" flexibility="grow" padding="around-small">
+                <div class="slds-text-heading_medium">Give Additional Information
+                    <span>
+                        <lightning:buttonIcon disabled="{!v.canUploadFile}" alternativeText="Add Info" iconName="utility:add"
+                            onclick="{!c.showInfoSection}" /></span></div>
+            </lightning:layoutItem>
+         
+            <!--COULMN INFORMATION-->
+            <aura:if isTrue="{!v.columnInformation.length > 0}">
+                <aura:iteration items="{!v.columnInformation}" var="columnInfo" indexVar="index">
+                    <lightning:layoutItem size="12" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:combobox options="{!v.options}" disabled="{!v.canUploadFile}" name="{!index}" onchange="{! c.setColumnDataType}" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" mediumDeviceSize="5" largeDeviceSize="5" padding="around-small">
+                        <lightning:input disabled="{!v.canUploadFile}"  placeholder="Enter the column name" name="{!index}"
+                            onchange="{!c.saveColumnName}" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="3" mediumDeviceSize="3" largeDeviceSize="3" padding="around-small"
+                        alignmentBump="top">
+                        <lightning:buttonIcon class="`slds-center" disabled="{!v.canUploadFile}" alternativeText="delete row" iconName="utility:ban"
+                            onclick="{!c.deleteRow}" name="{!index}" size="large" variant="border" />
+                    </lightning:layoutItem>
+                </aura:iteration>
+            </aura:if>
+            <lightning:input type="checkbox" label="Ready for Upload" name="input1" onchange="{!c.disableAll}"/>
+            <aura:if isTrue="{!v.canUploadFile}">
+            <lightning:layoutItem size="12" flexibility="grow" padding="around-small">
+                    <lightning:input name="file1" type="file" label="Attachment" multiple="true" accept=".xls, .xlsx"
+                        onchange="{! c.handleFilesChange }" />
+                </lightning:layoutItem>
+            </aura:if>
+        </lightning:layout>
+    </lightning:card>
+    <lightning:layout multipleRows="true">
+        <aura:if isTrue="{!v.dataTableReady}">
+            <lightning:layoutItem flexibility="grow,auto" padding="around-small">
+                <lightning:datatable columns="{! v.columns }" data="{! v.data }" keyField="id" />
+            </lightning:layoutItem>
+        </aura:if>
+    </lightning:layout>
+
+
+</aura:component>
