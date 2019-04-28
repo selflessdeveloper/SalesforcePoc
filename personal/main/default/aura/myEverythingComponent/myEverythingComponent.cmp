@@ -1,0 +1,19 @@
+<aura:component implements="flexipage:availableForRecordHome" access="global" >
+<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute type="String" name="nameValue" default="beginning.."/>
+
+    
+    <!--intantiating unsaved changed component -->
+    <lightning:unsavedChanges aura:id="unsavedData" 
+                              onsave="{!c.saveData}"
+                              ondiscard="{!c.discardData}"/>
+    
+    <lightning:card title="Create Account">
+        <!-- Handle name change, make unsaved changes in this action as user has typed some value-->        
+        <lightning:input name="Name" aura:id="name" label="Enter name" value="{!v.nameValue}" onchange="{!c.handleDataChange}"/>
+        <!-- Handle phone change, make unsaved changes in this action as user has typed some value-->        
+        <lightning:input name="Phone" aura:id="phone" type="tel" label="Enter phone number" onchange="{!c.handleDataChange}"/>
+        <!-- Handle save action, clear unsaved changes in this action -->
+        <lightning:button label="Save Account" onclick="{!c.saveAccount}" />
+    </lightning:card>
+</aura:component>

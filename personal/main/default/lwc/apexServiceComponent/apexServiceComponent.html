@@ -1,0 +1,17 @@
+<template>
+    <lightning-card title="Contact using Wire Service" icon-name="standard:contact">
+    <template if:true={contact.data}>
+        <div class="slds-m-around_medium">
+            <p>{name}</p>
+            <p>{lastName}</p>
+            <p><lightning-formatted-phone value={phone}></lightning-formatted-phone></p>
+            <p>{title}</p>
+        </div>
+    </template>
+    <template if:true={contact.error}>
+        <p>{contact.error}</p>
+    </template>
+
+    </lightning-card>
+    
+</template>

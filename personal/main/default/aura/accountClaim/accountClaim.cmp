@@ -1,0 +1,19 @@
+<aura:component implements="force:lightningQuickAction,force:hasRecordId,force:appHostable" >
+    
+        
+     <lightning:notificationsLibrary aura:id="notificationsLibrary"/>
+    
+    <div class="slds-p-bottom_large slds-p-left_large" style="width:500px">
+       <lightning:recordEditForm objectApiName="Account"
+                                 recordId="{!v.recordId}"
+                                 aura:id="editForm"
+                                  onsuccess="{!c.handleOnSuccess}">
+           <lightning:messages/>
+           <lightning:inputField  fieldName="Reason__c" />
+           <lightning:inputField fieldName="Claim_Justification__c"  />
+           <lightning:inputField fieldName="Comments__c" />
+           <lightning:button aura:id="submit" type="submit" label="Submit Claim" class="slds-m-top_medium"  />
+        </lightning:recordEditForm>
+    </div>
+	
+</aura:component>

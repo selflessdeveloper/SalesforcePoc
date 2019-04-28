@@ -1,0 +1,25 @@
+<apex:page standardController="Case">
+    <apex:pageBlock title="Case History">
+    <apex:pageBlockSection title="Case History">
+       <apex:pageBlockTable value="{!case.Histories}" var="h">
+                <apex:column headerValue="Date"  value="{!h.createddate}"/>
+                <apex:column headerValue="Field" value="{!h.field}"/>
+                <apex:column headerValue="From" value="{!h.oldvalue}"/>
+                <apex:column headerValue="To"   value="{!h.newvalue}"/>
+        </apex:pageBlockTable>
+    </apex:pageBlockSection>
+        <apex:pageBlockSection >
+        <apex:pageBlockSection >
+            <apex:pageBlockTable value="{!case.case_histories__r}" var="ch">
+                <apex:column headerValue="Created Date" value="{! ch.Created_Date__c}"/>
+                <apex:column headerValue="Field" value="{! ch.Tracked_Field__c}"/>
+                 <apex:column headerValue="From" value="{! ch.Old_Value__c}"/>
+                 <apex:column headerValue="To" value="{! ch.New_Value__c}"/>
+                
+                
+            </apex:pageBlockTable> 
+            
+            </apex:pageBlockSection>
+        </apex:pageBlockSection>
+        </apex:pageBlock>
+</apex:page>

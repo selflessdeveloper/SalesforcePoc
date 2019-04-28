@@ -1,0 +1,6 @@
+<aura:component >
+    <aura:dependency resource="c:accountClaim" />
+    
+    <lightning:button label = "Create Component" onclick="{! c.createComponent}" />
+	{!v.body}
+</aura:component>

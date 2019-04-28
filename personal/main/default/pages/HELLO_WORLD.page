@@ -1,0 +1,18 @@
+<apex:page sidebar="true">
+    <p>
+        Hello World!
+    </p>
+    
+    <apex:pageBlock title="My Page Block Title">
+        
+        <apex:pageBlockSection title="My Page Block Section title" columns="2">
+      <p>{!IF($USER.isactive, $user.username, 'inactive')}
+          
+            </p>
+            
+            <p>{! IF(day(TODAY())<15, 'More than  15 days are left ',' Less than 15 days are left')}</p>
+        
+        </apex:pageBlockSection>
+    
+    </apex:pageBlock>
+</apex:page>

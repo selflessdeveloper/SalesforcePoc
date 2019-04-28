@@ -1,0 +1,11 @@
+<apex:page >
+    <apex:pageBlock title="User Information">
+        <apex:pageBlockSection columns="1">
+            {! $user.FirstName} {! $user.LastName}
+            {! $user.UserName}
+            
+        
+        </apex:pageBlockSection>
+    
+    </apex:pageBlock>
+</apex:page>

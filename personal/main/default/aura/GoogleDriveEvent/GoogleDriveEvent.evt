@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="This event will be fired when the files are uploaded or deleted.">
+    <aura:attribute name="operationType" type="String" description="Valid values are Upload or Delete"/>
+    <aura:attribute name="fileDetails" type="Object[]" description="Details of the files on which the operation has been performed."/>
+</aura:event>

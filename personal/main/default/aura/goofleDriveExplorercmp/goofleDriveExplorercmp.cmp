@@ -1,0 +1,85 @@
+<aura:component > 
+    <ltng:require scripts="/resource/1542704209000/GoogleApi" 
+    afterScriptsLoaded="{!c.handleClientLoad}" />
+    <aura:attribute name="fileList" type="Object[]"/>
+    <aura:attribute name="attachmentList" type="Object[]"/>
+    <aura:attribute name="loadStatus" type="String"/>
+    <aura:attribute name="errorMessage" type="String"/>
+    <aura:attribute name="listSize" type="Integer" default="5"/>
+    <aura:attribute name="displaySize" type="Integer"/>
+    <aura:attribute name="errorIconName" type="string" default="utility:warning"/>
+    <aura:attribute name="ShowButton" type="Boolean" default="false" />
+    
+    <aura:registerEvent name="GoogleDriveEvent" type="c:GoogleDriveEvent"/>
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+     
+    <aura:if isTrue="{!v.loadStatus == 'loading'}">
+        <lightning:spinner alternativeText="Loading" />
+    </aura:if>
+    <lightning:layout >
+        <lightning:layoutItem  size="12">
+            <center>
+                <div class="slds-text-heading_large"></div>
+            </center>
+        </lightning:layoutItem>
+    </lightning:layout >
+    <lightning:layout>
+        
+            <div class="slds-file-selector slds-file-selector_files">
+                <div class="slds-file-selector__dropzone">
+                    <input type="file" class="slds-file-selector__input slds-assistive-text"  id="file-upload-input-01" aria-labelledby="file-selector-primary-label file-selector-secondary-label" aura:id="fileId" onchange="{!c.handleFilesChange}" name="file" label="Upload Attachment"  disabled="{!v.showButton}" multiple="true"/>
+                    <label class="slds-file-selector__body" for="file-upload-input-01" id="file-selector-secondary-label">
+                        <span class="slds-file-selector__button slds-button slds-button_neutral">
+                            <lightning:icon iconName="utility:upload" size="x-small"/> &nbsp; File Upload
+                        </span>
+                    </label>
+                </div>
+            </div>
+        
+        <aura:if isTrue="{!v.errorMessage != undefined &amp;&amp; v.errorMessage != ''}">
+            <lightning:layoutItem size="12" padding="around-small">
+                <div class="slds-box slds-theme_shade slds-theme_alert-texture">
+                    <lightning:layout>
+                        <lightning:layoutItem size="2">
+                            <lightning:icon iconName="{!v.errorIconName}" alternativeText="Warning!" variant="warning"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="10">
+                            <p>{!v.errorMessage}</p>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </div>
+            </lightning:layoutItem>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.errorMessage == undefined || v.errorMessage == ''}">
+            <lightning:layoutItem size="12" class="boundaryBox">
+                <div class="slds-box boundaryBox">
+                    <aura:iteration items="{!v.attachmentList}" var="item" indexVar="index">
+                        <aura:if isTrue="{!index &lt;= v.displaySize-1}">
+                            <lightning:layout pullToBoundary="small" multipleRows="true">
+                                <lightning:layoutItem padding="around-small" size="1">
+                                    <lightning:icon iconName="{!item.fileIcon}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem padding="around-small" size="8" class="fileDetails">
+                                    <p><div class="fileName"> {!item.fileName}</div> </p>
+                                    <p><div class="secondaryFields"> {!item.displayUserName} • {!item.displayDate} • {!item.displaySize}</div></p>
+                                </lightning:layoutItem>
+                                <lightning:layoutItem padding="around-small" size="3" >
+                                    <div class="floatRight">
+                                        <lightning:buttonIcon iconName="utility:download" size="medium" name="{!item.Name+'==='+item.fileName+'==='+item.eTag}"  variant="bare" onclick="{! c.handleDownload }" alternativeText="Download" />&nbsp;
+                                        <lightning:buttonIcon iconName="utility:delete" size="medium" name="{!item.Name+'==='+item.fileName+'==='+item.eTag+'==='+item.type}"  iconClass="error" variant="bare" onclick="{!c.handleDelete }"  alternativeText="Delete" />
+                                    </div>
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                            <center><hr style="{!index != v.displaySize-1 ? 'display:block;margin:0 !important;' : 'display:none;'}"/></center>
+                        </aura:if>
+                    </aura:iteration>
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" >
+                <center>Showing {!v.displaySize} of {!v.attachmentList.length}</center>
+                <center><lightning:button variant="Neutral" disabled="{!v.displaySize == v.attachmentList.length}" label="Show More" title="Show More" onclick="{! c.showMore }"/></center>
+            </lightning:layoutItem>
+        </aura:if>
+    </lightning:layout>
+</aura:component>

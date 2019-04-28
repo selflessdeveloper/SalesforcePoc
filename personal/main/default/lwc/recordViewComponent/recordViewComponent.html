@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="Contact using Apex Method Call" icon-name="standard:contact">
+    <lightning-record-view-form object-api-name={objectApiName} record-id={recordId}>
+        <template for:each={fieldSetNames.data} for:item="name">
+        <lightning-layout-item key={name}>
+            <div class="slds-m-around_medium">
+            <lightning-output-field field-name={name}></lightning-output-field>
+            </div>
+        </lightning-layout-item>
+        </template>
+    </lightning-record-view-form>
+    <template if:true={fieldSetNames.error}>
+        <p>{fieldSetNames.error}</p>
+    </template>
+    </lightning-card>
+</template>

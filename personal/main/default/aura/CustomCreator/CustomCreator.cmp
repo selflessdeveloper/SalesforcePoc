@@ -1,0 +1,125 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="CustomCreatorService" >
+    <aura:attribute name = "Options" type="List" default="[{'label': 'Custom Object', 'value' : 'Custom Object' },{'label': 'Custom Field', 'value': 'Custom Field'},{'label':'Apex Class', 'value':'Apex Class'}]"/>
+    <aura:attribute name = "ObjectOptions" type = "List" default="[]"/> 
+    <aura:attribute name = "showObjectList" type ="Boolean" default="false"/>
+    <aura:attribute name = "SelectedItem" type="String" default="" />
+    <aura:attribute name = "SelectedObject" type ="String" default= ""/>
+    <aura:attribute name= "FieldType" type = "List" default="[]" />
+    <aura:attribute name= "SelectedField" type = "String" default = ""/>
+    <aura:attribute name = "SelectedReferenceObject" type="String" default = ""/>
+    
+    <!--Custom field related attributes -->
+    <aura:attribute name = "showTextRelated" type="Boolean" default = "false"/>
+    
+    <!-- handlers-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    
+    <div class="slds-p-around_x-small">
+        <lightning:layoutItem>
+            <lightning:combobox name = "Item" label="Item" placeholder = "Select Item" options = "{! v.Options}" onchange = "{! c.handleChange}"/>
+        </lightning:layoutItem>
+    </div>
+    <aura:if isTrue = "{! v.showObjectList}">
+        <lightning:layout>    
+            <div class= "slds-p-around_x-small">   
+                <lightning:layoutItem>   
+                    <lightning:combobox name = "Object" label = "Object" placeHolder = "Please select an object" options = "{! v.ObjectOptions}" onchange = "{! c.handleObjectChange}"/>
+                </lightning:layoutItem >
+                <lightning:layoutItem>
+                    <lightning:combobox name = "Field Type" label = "Field Type" placeHolder = "Please select the field type" options = "{!v.FieldType}" onchange = "{! c.handleFieldSelect}"/>
+                </lightning:layoutItem>
+            </div>
+        </lightning:layout>      
+        <div>
+            <aura:if isTrue="{!v.showTextRelated}"> 
+                <div class = "slds-p-around_x-small">
+                    <lightning:layoutitem>  
+                        <lightning:input name="Label" label="Field Label" placeholder="type here..." aura:id="TextLabel"/>
+                    </lightning:layoutitem> 
+                </div>    
+                <div class = "slds-p-around_x-small">
+                    <lightning:layoutitem>
+                        <lightning:input type="checkbox" label="is It Required" name="input2" checked="false"  aura:id="Required"/>
+                    </lightning:layoutitem>  
+                </div>    
+                <div class = "slds-p-around_x-small">
+                    <lightning:layoutitem>
+                        <lightning:input type="number" name="MaxLength" label="Maximum Length of the text" placeholder="Type in Here" aura:id = "maxLength"/>
+                    </lightning:layoutitem> 
+                </div>                       
+            </aura:if> 
+        </div>
+        <div>
+            <aura:if isTrue="{! v.SelectedField == 'Number'}">
+                <div class = "slds-p-around_x-small">
+                    <lightning:layoutitem>  
+                        <lightning:input name="Label" label="Field Label" placeholder="type here..." aura:id="NumberLabel"/>
+                    </lightning:layoutitem> 
+                </div>
+                <div class = "slds-p-around_x-small">
+                    <lightning:layoutitem>
+                        <lightning:input type="checkbox" label="is It Required" name="input2" checked="false"  aura:id="RequiredNumber"/>
+                    </lightning:layoutitem>  
+                </div>
+                <div class = "slds-p-around_x-small">
+                    <lightning:layoutitem>
+                        <lightning:input type="number" name="DecimalLeft" label="Number of Decimal Places to the left" placeholder="Type in Here" aura:id = "leftDecimal" required="true"/>
+                    </lightning:layoutitem> 
+                </div> 
+                <div class = "slds-p-around_x-small">
+                    <lightning:layoutitem>
+                        <lightning:input type="number" name="DecimalRIght" label="Number of Decimal Places to the right" placeholder="Type in Here" aura:id = "rightDecimal" required="true"/>
+                    </lightning:layoutitem> 
+                </div> 
+                <div class ="slds-text-color_destructive">
+                    NOTE: Decimal places to the left must be greater than decimal places to the right
+                </div>
+            </aura:if>
+        </div>
+        <div>
+            <aura:if isTrue="{!v.SelectedField == 'Lookup Relationship'}">
+                <div> 
+                    <lightning:layoutItem>   
+                        <lightning:combobox name = "Object" label = "Object" placeHolder = "Please select an object" options = "{! v.ObjectOptions}" onchange = "{! c.handleReferenceObjectChange}" required = "true"/>
+                    </lightning:layoutItem >
+                </div>   
+                <div class = "slds-p-around_x-small">
+                    <lightning:layoutitem>  
+                        <lightning:input name="Label" label="Field Label" placeholder="type here..." aura:id="lookUpLabel"/>
+                    </lightning:layoutitem> 
+                </div>
+                <div class = "slds-p-around_x-small">
+                    <lightning:layoutitem>
+                        <lightning:input type="checkbox" label="is It Required" name="input2" checked="false"  aura:id="RequiredLookUp"/>
+                    </lightning:layoutitem>  
+                </div>
+                <div class = "slds-p-around_x-small">
+                    <lightning:layoutitem>  
+                        <lightning:input name="Label" label="Child Relationship Name" placeholder="type here..." aura:id="ChildLabel"/>
+                    </lightning:layoutitem> 
+                </div>
+                
+            </aura:if>
+        </div>
+        
+    </aura:if>
+    <aura:if isTrue = "{! v.SelectedItem == 'Apex Class'}">
+        <div class = "slds-p-around_x-small">
+            <lightning:layoutitem>
+                <lightning:input name = "Class Name" label = "Class Name" placeholder="Please mention the class Name" aura:id="ApexClassName"/>
+            </lightning:layoutitem>
+        </div>
+        <div class = "slds-p-around_x-small">
+            <lightning:layoutitem>
+                <lightning:input name = "Class Body" label = "Class Body" placeholder="Please enter the minimal class body" aura:id="ApexClassBody"/>
+            </lightning:layoutitem>
+        </div>
+    </aura:if>
+    <div class = "slds-p-around_x-small" >
+        <lightning:button variant="brand" label="Create" title="Create" onclick="{! c.handleClick }" />
+    </div> 
+    
+    
+</aura:component>

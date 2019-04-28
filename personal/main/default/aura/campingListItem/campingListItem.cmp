@@ -1,0 +1,15 @@
+<aura:component controller="CampingListController" >
+
+    <aura:attribute name="item" type="Camping_Item__c" required = "false"/>
+   
+  
+
+                <div class="slds-card__header slds-grid" > 
+                <p>{!v.item.Name}</p>                
+    </div>
+        
+               
+        
+    
+    
+</aura:component>
