@@ -1,2 +1,0 @@
-# SalesforcePoc
-Experimenting with Salesforce
